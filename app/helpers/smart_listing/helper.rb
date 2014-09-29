@@ -76,16 +76,23 @@ module SmartListing
       end
 
       def sortable title, attribute, options = {}
-        dirs = options[:sort_dirs] || @smart_listing.sort_dirs || [nil, "asc", "desc"]
-        
-        next_index = dirs.index(@smart_listing.sort_order(attribute)).nil? ? 0 : (dirs.index(@smart_listing.sort_order(attribute)) + 1) % dirs.length
-
+        dirs = [nil, "asc", "desc"]
+        case @smart_listing.sort_order(attribute)
+          when -1
+            next_index = 0
+            current_index = 2
+          when 1
+            next_index = 2
+            current_index = 1
+          else
+            next_index = 1
+            current_index = 0
+        end
         sort_params = {
           attribute => dirs[next_index]
         }
-
         locals = {
-          :order => @smart_listing.sort_order(attribute),
+          :order => dirs[current_index],
           :url => @template.url_for(sanitize_params(@template.params.merge(@smart_listing.all_params(:sort => sort_params)))),
           :container_classes => [SmartListing.config.classes(:sortable)],
           :attribute => attribute,
