@@ -31,7 +31,7 @@ module SmartListing
         :sort_attributes                => :implicit,                   # allow implicitly setting sort attributes
         :default_sort                   => {},                          # default sorting
         :href                           => nil,                         # set SmartListing target url (in case when different than current url)
-        :remote                         => false,                        # SmartListing is remote by default
+        :remote                         => true,                        # SmartListing is remote by default
         :callback_href                  => nil,                         # set SmartListing callback url (in case when different than current url)
       }.merge(SmartListing.config.global_options).merge(options)
 
@@ -97,8 +97,11 @@ module SmartListing
         end
       else
         # let's sort by all attributes
-        @collection = @collection.order_by(@sort) if @sort && @sort.any?
-
+        if defined? ::Mongoid
+          @collection = @collection.order_by(@sort) if @sort && @sort.any?
+        else
+          @collection = @collection.order(@sort) if @sort && @sort.any?
+        end
         if @options[:paginate] && @per_page > 0
           @collection = @collection.page(@page).per(@per_page)
         end
