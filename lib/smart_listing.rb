@@ -90,7 +90,7 @@ module SmartListing
           end 
         end
         if @options[:paginate] && @per_page > 0
-          @collection = ::Kaminari.paginate_array(@collection).page(@page).per(@per_page)
+          @collection = ::Kaminari.paginate_array(@collection).page(@page).per(25)
           if @collection.length == 0
             @collection = @collection.page(@collection.num_pages)
           end
@@ -103,7 +103,7 @@ module SmartListing
           @collection = @collection.order(@sort) if @sort && @sort.any?
         end
         if @options[:paginate] && @per_page > 0
-          @collection = @collection.page(@page).per(@per_page)
+          @collection = @collection.page(@page).per(25)
         end
       end
     end
