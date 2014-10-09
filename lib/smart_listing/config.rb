@@ -8,7 +8,7 @@ module SmartListing
   end
 
   class Configuration
-    DEFAULT_PAGE_SIZES = [10, 20, 50, 100]
+    DEFAULT_PAGE_SIZES = [25]
 
     DEFAULTS = {
       :global_options => {
